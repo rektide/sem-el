@@ -21,7 +21,8 @@ function makeClass(klass, factories, opts){
 	  vocab= vocabBase instanceof Function? vocabExpr(opts) : vocabExpr,
 	  containerFactory= opts && opts.containerFactory || module.exports.containerFactory,
 	  canonicalType= opts && opts.canonicalType || klass["@type"],
-	  typeof_= canonicalType.startsWith(vocab) ? canonicalType.substring(vocab.length) : canonicalType
+	  typeof_= canonicalType.startsWith(vocab) ? canonicalType.substring(vocab.length) : canonicalType,
+	  style_= opts && opts.style
 
 	for(var i in klass){
 		var
@@ -30,8 +31,11 @@ function makeClass(klass, factories, opts){
 			render: function(props){
 				let
 				  type= typeof_ != this.props.parentType ? { typeof: typeof_  } : null,
-				  prop= null,
-				  style= 
+				  prop= prop,
+				  style= Radium({},
+				    style_,
+				    props.style
+				  ),
 				  containerProps= _.clone({},
 				    type,
 				    {
