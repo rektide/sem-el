@@ -19,18 +19,21 @@ function makeClass(klass, factories, opts){
 	const
 	  vocabExpr= opts && opts.vocabFactory || module.exports.vocabFactory,
 	  vocab= vocabBase instanceof Function? vocabExpr(opts) : vocabExpr,
-	  containerFactory= opts && opts.containerFactory || module.exports.containerFactory
+	  containerFactory= opts && opts.containerFactory || module.exports.containerFactory,
+	  canonicalType= opts && opts.canonicalType || klass["@type"],
+	  typeof_= canonicalType.startsWith(vocab) ? canonicalType.substring(vocab.length) : canonicalType
+
 	for(var i in klass){
 		var
 		  prop= klass[i],
 		  klass= React.createClass({
 			render: function(props){
-				var
-				  childProps= _.clone({}, this.props, {
+				let
+				  containerProps= _.clone({}, this.props, {
 					vocab: vocab,
-					typeof: null
+					typeof: typeof_
 				  })
-				return containerFactory.call(null, child, this.children)
+				return containerFactory.call(null, containerProps, this.children)
 			}
 		  })
 		factories[i]= factory
