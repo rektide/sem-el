@@ -29,11 +29,17 @@ function makeClass(klass, factories, opts){
 		  klass= React.createClass({
 			render: function(props){
 				let
-				  containerProps= _.clone({}, this.props, {
-					vocab: vocab,
-					typeof: typeof_
-				  })
-				return containerFactory.call(null, containerProps, this.children)
+				  type= typeof_ != this.props.parentType ? { typeof: typeof_  } : null,
+				  prop= null,
+				  style= 
+				  containerProps= _.clone({},
+				    type,
+				    {
+					style,
+					vocab,
+				    }),
+				  children= this.children
+				return containerFactory.call(null, containerProps, children)
 			}
 		  })
 		factories[i]= factory
