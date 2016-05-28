@@ -8,24 +8,39 @@ var
   Prop= SchemaOrg.property,
   _= require("lodash")
 
-function El(){
-	
+module.exports.defaults = {
+	vocab: "http://schema.org",
+	tag: "div",
+	factories: React.DOM,
 }
 
-module.exports.container = React.div.bind(DOM)
-module.exports.vocab= "http://schema.org/"
+function makeClass(klass, factories, opts){
+	opt = opts || {}
+	var type= klass["@type"]
+	var name= type.toString()
 
-function makeClass(klass, factories){
+	var statics = {
+		defaults: {
+			itemScope: true,
+			itemType: (opts.vocab || module.exports.vocab) + name
+		},
+		type
+	}
 	var klass= React.createClass({
+		displayName: name,
+		statics,
 		render: function(props){
-			var
-			  childProps= _.clone({}, this.props, {
-				itemscope: ""
-				itemtype: vocab + i
-			  })
-			var 
-			return container.call(null, child, this.children)
+			propsDefaulter(props, this, klass)
+			return props.tag(props, this.children)
 		}
 	})
 	return factories
+}
+
+function propsDefaulter(props, self, klass){
+	var merged = _.default({}, props, self.state.tag, klass.defaults, module.exports.defaults)
+	if(merged.tag instanceof String){
+		merged.tag = merged.factories[props.tag]
+	}
+	return merged
 }
