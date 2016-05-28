@@ -12,6 +12,7 @@ module.exports.defaults = {
 	vocab: "http://schema.org",
 	tag: "div",
 	factories: React.DOM,
+	reactProps: 
 }
 
 function makeClass(klass, factories, opts){
@@ -30,17 +31,15 @@ function makeClass(klass, factories, opts){
 		displayName: name,
 		statics,
 		render: function(props){
-			propsDefaulter(props, this, klass)
-			return props.tag(props, this.children)
+			var sharedState = {
+				tag: this.state.tag
+			}
+			var merged = -.default({}, props, sharedState, klass.defaults, module.exports.defaults) 
+			if(merged.tag instanceof String){
+				merged.tag = merged.factories[merged.tag]
+			}
+			return merged.tag(merged, this.children)
 		}
 	})
 	return factories
-}
-
-function propsDefaulter(props, self, klass){
-	var merged = _.default({}, props, self.state.tag, klass.defaults, module.exports.defaults)
-	if(merged.tag instanceof String){
-		merged.tag = merged.factories[props.tag]
-	}
-	return merged
 }
