@@ -4,10 +4,10 @@ var
   React= require("react"),
   _= require("lodash")
 
-function makeProp(prop, factories, opts){
+function makeProp(prop, opts){
 	opts= opts|| {}
 	var label= prop.label
-	var itemType = prop.range && prop.range.length == 1 && prop.range
+	var itemType = opts.itemType || prop.range && prop.range.length == 1 && prop.range
 
 	var statics = {
 		defaults: {
@@ -15,7 +15,7 @@ function makeProp(prop, factories, opts){
 			itemType,
 			itemProp: label
 		},
-		type
+		prop
 	}
 	function render(props){
 		var sharedState= {
@@ -25,7 +25,7 @@ function makeProp(prop, factories, opts){
 		if(merged.tag instanceof String){
 			merged.tag = merged.factories[merged.tag]
 		}
-		return merged.tag(merged, this.children)
+		return merged.tag(merged, props.children)
 	}
 	var reactProp= React.createClass({
 		displayName: label,

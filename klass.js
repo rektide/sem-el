@@ -6,7 +6,7 @@ var
   _= require("lodash")
 
 function makeClass(klass, opts){
-	opt= opts|| {}
+	opts= opts|| {}
 	var type= klass["@type"]
 	var label= type.label
 
@@ -26,7 +26,7 @@ function makeClass(klass, opts){
 		if(merged.tag instanceof String){
 			merged.tag = merged.factories[merged.tag]
 		}
-		return merged.tag(merged, this.children)
+		return merged.tag(merged, props.children)
 	}
 	var reactKlass= React.createClass({
 		displayName: label,
