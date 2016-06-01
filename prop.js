@@ -7,12 +7,13 @@ var
 function makeProp(prop, factories, opts){
 	opts= opts|| {}
 	var label= prop.label
+	var itemType = prop.range && prop.range.length == 1 && prop.range
 
 	var statics = {
 		defaults: {
-			itemprop: label,
 			itemScope: true,
-			itemType: prop.range
+			itemType,
+			itemProp: label
 		},
 		type
 	}
